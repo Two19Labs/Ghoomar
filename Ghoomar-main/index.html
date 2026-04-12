@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ghoomar | A Celebration of Royal Heritage</title>
+  <meta name="description" content="Welcome to Ghoomar. Explore our signature offerings: Traditional Thali, Vedanta, Yatra, and Village experiences.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            burgundy: { 500:'#A43434', 700:'#6E1515', 900:'#1A0808' },
+            gold: { 300:'#EFC23F', 500:'#C9933A' },
+            cream: '#FDF6EC'
+          },
+          fontFamily: {
+            display: ['"Playfair Display"','Georgia','serif'],
+            body: ['"DM Sans"','system-ui','sans-serif'],
+            accent: ['"Cormorant Garamond"','serif'],
+          },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    /* ─── RESET ──────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', system-ui, sans-serif; background: #120404; color: #FDF6EC; overflow-x: hidden; }
+
+    /* ─── CUSTOM GRAIN & ORNAMENTS ───────────────────── */
+    .grain::after {
+      content: ''; position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 10;
+    }
+    
+    .gold-bar {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #C9933A 30%, #E8891C 50%, #C9933A 70%, transparent);
+    }
+    
+    .mandala-bg::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='130' height='130' viewBox='0 0 130 130'%3E%3Cg fill='none' stroke='%23C9933A' stroke-opacity='0.045' stroke-width='0.6'%3E%3Ccircle cx='65' cy='65' r='56'/%3E%3Ccircle cx='65' cy='65' r='44'/%3E%3Ccircle cx='65' cy='65' r='32'/%3E%3Ccircle cx='65' cy='65' r='20'/%3E%3Ccircle cx='65' cy='65' r='10'/%3E%3Cline x1='65' y1='9' x2='65' y2='121'/%3E%3Cline x1='9' y1='65' x2='121' y2='65'/%3E%3Cline x1='22' y1='22' x2='108' y2='108'/%3E%3Cline x1='108' y1='22' x2='22' y2='108'/%3E%3Cpolygon points='65,9 108,33 121,79 91,115 39,115 9,79 22,33'/%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ─── ANIMATIONS ──────────────────────────────────── */
+    .reveal { opacity: 0; transform: translateY(30px); transition: 1s cubic-bezier(0.22,1,0.36,1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: 0.1s; }
+    .d2 { transition-delay: 0.2s; }
+    .d3 { transition-delay: 0.3s; }
+    .d4 { transition-delay: 0.4s; }
+
+    @keyframes slowSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .hero-mandala svg { animation: slowSpin 60s linear infinite; }
+
+    /* ─── CARDS ───────────────────────────────────────── */
+    .journey-card {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      aspect-ratio: 10/13;
+      border: 1px solid rgba(201,147,58,0.2);
+      transform: translateY(0);
+      transition: all 0.5s cubic-bezier(0.22,1,0.36,1);
+      cursor: pointer;
+      display: block;
+      text-decoration: none;
+    }
+
+    .journey-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(18,4,4,0.95) 0%, rgba(18,4,4,0.3) 50%, transparent 100%);
+      z-index: 2;
+      transition: opacity 0.5s ease;
+    }
+
+    .journey-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+      filter: saturate(0.85) contrast(1.1);
+      transition: transform 1.5s cubic-bezier(0.22,1,0.36,1);
+    }
+
+    .journey-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 30px;
+      z-index: 3;
+      text-align: center;
+      transform: translateY(12px);
+      transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+    }
+
+    /* Hover states */
+    .journey-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(201,147,58,0.6);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 30px rgba(201,147,58,0.15);
+    }
+    .journey-card:hover .journey-img {
+      transform: scale(1.08);
+      filter: saturate(1.1) contrast(1.15);
+    }
+    .journey-card:hover .journey-content {
+      transform: translateY(0);
+    }
+    .journey-card:hover::before {
+      background: linear-gradient(to top, rgba(18,4,4,0.95) 0%, rgba(164,52,52,0.4) 60%, transparent 100%);
+    }
+
+    .journey-super {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(253,246,236,0.6);
+      margin-bottom: 8px;
+      display: block;
+    }
+    
+    .journey-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: #FDF6EC;
+      line-height: 1.1;
+      text-shadow: 0 4px 12px rgba(0,0,0,0.8);
+    }
+
+    /* ─── LOGO AND HEADER ─────────────────────────────── */
+    .main-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 700;
+      color: #FDF6EC;
+      letter-spacing: -0.02em;
+    }
+    .sub-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem;
+      color: #C9933A;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+    }
+
+  </style>
+</head>
+<body class="grain mandala-bg relative min-h-screen flex flex-col justify-center py-12">
+
+  <!-- Background Mandala Elements -->
+  <div class="hero-mandala absolute top-[-5%] left-[-5%] opacity-10 pointer-events-none" style="width:500px;">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none" stroke="#C9933A" stroke-width="0.5">
+        <circle cx="100" cy="100" r="90"/><circle cx="100" cy="100" r="75"/>
+        <line x1="100" y1="10" x2="100" y2="190"/><line x1="10" y1="100" x2="190" y2="100"/>
+        <line x1="36" y1="36" x2="164" y2="164"/><line x1="164" y1="36" x2="36" y2="164"/>
+      </g>
+    </svg>
+  </div>
+  <div class="hero-mandala absolute bottom-[-10%] right-[-5%] opacity-10 pointer-events-none" style="width:600px;">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none" stroke="#C9933A" stroke-width="0.5">
+        <circle cx="100" cy="100" r="90"/><circle cx="100" cy="100" r="75"/>
+        <line x1="100" y1="10" x2="100" y2="190"/><line x1="10" y1="100" x2="190" y2="100"/>
+        <line x1="36" y1="36" x2="164" y2="164"/><line x1="164" y1="36" x2="36" y2="164"/>
+      </g>
+    </svg>
+  </div>
+
+  <main class="max-w-7xl mx-auto px-6 lg:px-12 relative z-20 w-full">
+    
+    <!-- Header -->
+    <header class="text-center mb-16 reveal">
+      <div class="mb-4">
+        <div class="main-logo">Ghoomar</div>
+        <div class="sub-logo mt-1">A Royal Heritage</div>
+      </div>
+      <div class="gold-bar w-24 mx-auto mb-6"></div>
+      <p class="font-accent text-xl md:text-2xl text-cream/70 max-w-2xl mx-auto italic font-light">
+        Choose your journey and immerse yourself in the rich culture, flavors, and spirit of authentic India.
+      </p>
+    </header>
+
+    <!-- Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+      
+      <!-- Option 1: Thali -->
+      <a href="thali.html" class="journey-card reveal d1 group">
+        <img src="new_thali.png" alt="Ghoomar Traditional Thali" class="journey-img">
+        <div class="journey-content">
+          <span class="journey-super">Indulge</span>
+          <h2 class="journey-title">Thali</h2>
+          <div class="h-0.5 w-12 bg-gold-500 mx-auto mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        </div>
+      </a>
+
+      <!-- Option 2: Vedanta -->
+      <a href="#" class="journey-card reveal d2 group">
+        <img src="vedanta.png" alt="Ghoomar Vedanta - Vegetarian Rajasthani Dish" class="journey-img">
+        <div class="journey-content">
+          <span class="journey-super">All Cuisine</span>
+          <h2 class="journey-title">Vedanta</h2>
+          <div class="h-0.5 w-12 bg-gold-500 mx-auto mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        </div>
+      </a>
+
+      <!-- Option 3: Yatra -->
+      <a href="#" class="journey-card reveal d3 group">
+        <img src="yatra.png" alt="Ghoomar Yatra - Desert Journey" class="journey-img">
+        <div class="journey-content">
+          <span class="journey-super">The Journey</span>
+          <h2 class="journey-title">Yatra</h2>
+          <div class="h-0.5 w-12 bg-gold-500 mx-auto mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        </div>
+      </a>
+
+      <!-- Option 4: Village -->
+      <a href="#" class="journey-card reveal d4 group">
+        <img src="village.png" alt="Ghoomar Village - Puppet Show" class="journey-img">
+        <div class="journey-content">
+          <span class="journey-super">Culture</span>
+          <h2 class="journey-title">Village</h2>
+          <div class="h-0.5 w-12 bg-gold-500 mx-auto mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        </div>
+      </a>
+
+    </div>
+
+  </main>
+
+  <script>
+    // Trigger entrance animation
+    window.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.reveal').forEach((el, index) => {
+        setTimeout(() => {
+          el.classList.add('visible');
+        }, 150 + index * 100);
+      });
+    });
+  </script>
+</body>
+</html>
